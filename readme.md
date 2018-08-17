@@ -18,6 +18,9 @@ docker run -v $(PWD):/root  -it --rm alpine:latest /root/sample-binary
 # build the Dockerfile using Dockerfile-single, produces a golang:alpine image with all os deps
 docker build . -t golang-deploy-examples-single:latest -f Dockerfile-single
 
+# build the Dockerfile using Dockerfile-single, produces a golang:alpine image with all os deps, stripping debug and using upx
+docker build . -t golang-deploy-examples-single-optimized:latest -f Dockerfile-single-optimized
+
 # build the Dockerfile using Dockerfile-stages, produces an alpine and copies binary from previous docker step
 docker build . -t golang-deploy-examples-stages:latest -f Dockerfile-stages
 

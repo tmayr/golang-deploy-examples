@@ -5,16 +5,20 @@ COPY . /go/src/sample
 WORKDIR /go/src/sample
 
 # install os deps
-RUN apk --no-cache add -U git tzdata
+RUN apk --no-cache add -U git tzdata upx
 
 # install dependency manager and dependencies
 RUN go get -u github.com/golang/dep/cmd/dep && dep ensure
 
-# compiel the app normally
-RUN go build -o /sample-binary sample.go
+# compile app optimized
+# -ldflags strip debugging information
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -a -o /sample-binary sample.go
+
+# lets upx the binary
+RUN upx --force /sample-binary
 
 # compile the actual app image and copy the binary from the previous step
-FROM alpine
+FROM scratch
 
 # copy the app
 COPY --from=gobuild sample-binary /
