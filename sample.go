@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"time"
 
@@ -30,9 +29,5 @@ func main() {
 
 		fmt.Printf("\n\n")
 		time.Sleep(3 * time.Second)
-
-		if r1.Intn(5) > 2 {
-			log.Fatal("Woops.")
-		}
 	}
 }
