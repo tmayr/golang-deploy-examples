@@ -10,7 +10,7 @@ RUN apk --no-cache add -U git tzdata upx
 RUN go get -u github.com/golang/dep/cmd/dep && dep ensure
 
 # compile app
-RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -a -o sample-binary sample.go
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -a -o sample-binary sample.go
 
 # lets upx the binary
 RUN upx --force sample-binary
