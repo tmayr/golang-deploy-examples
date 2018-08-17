@@ -1,0 +1,16 @@
+FROM golang:alpine
+
+COPY . /go/src/sample
+WORKDIR /go/src/sample
+
+# install os deps
+RUN apk --no-cache add -U git tzdata
+
+# install dependency manager and dependencies
+RUN go get -u github.com/golang/dep/cmd/dep && dep ensure
+
+# compile app
+RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -a -o sample-binary sample.go
+
+# run the app
+CMD ["./sample-binary"]
