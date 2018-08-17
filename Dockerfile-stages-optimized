@@ -10,15 +10,12 @@ RUN apk --no-cache add -U git tzdata upx
 # install dependency manager and dependencies
 RUN go get -u github.com/golang/dep/cmd/dep && dep ensure
 
-# compiel the app normally
-go build -o /sample-binary sample.go
-
 # compile app optimized
 # -ldflags strip debugging information
-# CGO_ENABLED=0 go build -ldflags="-s -w" -a -o /sample-binary sample.go
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -a -o /sample-binary sample.go
 
 # lets upx the binary
-# upx --force /sample-binary
+RUN upx --force /sample-binary
 
 # compile the actual app image and copy the binary from the previous step
 FROM alpine

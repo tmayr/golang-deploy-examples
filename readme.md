@@ -21,8 +21,11 @@ docker build . -t golang-deploy-examples-single:latest -f Dockerfile-single
 # build the Dockerfile using Dockerfile-stages, produces an alpine and copies binary from previous docker step
 docker build . -t golang-deploy-examples-stages:latest -f Dockerfile-stages
 
+# build the Dockerfile using Dockerfile-stages-optimized, produces an alpine and copies binary from previous docker step, stripping debug and using upx
+docker build . -t golang-deploy-examples-stages-optimized:latest -f Dockerfile-stages-optimized
+
 # execute with autorestart flag
-docker run -dt --restart always -m 64M --name golang-deploy-examples-stages golang-deploy-examples-stages:latest
+docker run -dt --restart always -m 64M --name golang-deploy-examples-stages golang-deploy-examples-stages-optimized:latest
 
 # log it
 docker logs golang-deploy-examples-stages --follow
@@ -33,11 +36,12 @@ docker stats
 ### cleanup
 
 # stop running containers
-docker stop golang-deploy-examples-stages
+docker stop golang-deploy-examples-stages-optimized
 
 # remove containers
-docker rm golang-deploy-examples-stages
+docker rm golang-deploy-examples-stages-optimized
 
 # remove images
 docker rmi golang-deploy-examples-single:latest
 docker rmi golang-deploy-examples-stages:latest
+docker rmi golang-deploy-examples-stages-optimized:latest
